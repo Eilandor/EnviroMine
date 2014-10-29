@@ -1360,14 +1360,17 @@ public class EM_StatusManager
 	
 	public static float getTempFalloff(float temp, float dist, int range)
 	{
-		float maximum = (float)Math.sqrt(3*(Math.pow(range, 2)));
+		// sqrt(3*range*range) == sqrt(3)*range == 1.73*range
+		float maximum = 1.7320508F * (float)range;
 		
 		if(dist > maximum)
 		{
 			return 0;
 		} else
 		{
-			return (float)((temp/Math.pow(maximum, 2)) * -Math.pow(dist, 2) + temp);
+			// -temp/max/max*dist*dist+temp == temp/1.73/range/1.73/range*dist*dist+temp == temp/3/range/range*dist*dist+temp
+			return (float)((-temp * dist * dist / range / range / 3) + temp);
+
 		}
 	}
 }
